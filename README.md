@@ -1,7 +1,7 @@
 # Benchmark
 This repository holds the data and scripts used in Benchmark for evaluating pathway analysis methods.
 
-The ground-truth pathway files 
+The [ground-truth pathway files ](https://pages.github.com/)
 
 For most methods, the workflow is that for each pathway
 
