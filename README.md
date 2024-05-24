@@ -5,6 +5,7 @@ This repository holds the data and scripts used in Benchmark for evaluating path
 
 * [Pathway files](https://github.com/hedgehug/Benchmark/tree/main/pathway_files)
 * [Raw count matrix](https://github.com/hedgehug/Benchmark/tree/main/data/count_matrix)
+* Prerank files:
 
 # Run methods
 
