@@ -1,8 +1,10 @@
 # Benchmark
 This repository holds the data and scripts used in Benchmark for evaluating pathway analysis methods.
 
+# Data summary
 
-The [ground-truth pathway files ](https://github.com/hedgehug/Benchmark/tree/main/pathway_files)
+* [Pathway files](https://github.com/hedgehug/Benchmark/tree/main/pathway_files)
+* [Raw count matrix](https://github.com/hedgehug/Benchmark/tree/main/data/count_matrix)
 
 # Run methods
 
