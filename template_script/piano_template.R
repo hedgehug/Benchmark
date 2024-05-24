@@ -71,5 +71,5 @@ combres <- consensusScores(resList=list(gsares_1, gsares_2, gsares_3, gsares_4, 
                            class='distinct', direction='up', n=200)
 
 write.table(combres$rankMat, file='OUTFILE_RANK', sep='\t', quote = FALSE)
-write.table(combres$pMat, file='OUTFILE_PVAL', sep='\t', quote = FALSE)
+# write.table(combres$pMat, file='OUTFILE_PVAL', sep='\t', quote = FALSE)
 
