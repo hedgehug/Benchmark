@@ -12,5 +12,8 @@ This repository holds the data and scripts used in Benchmark for evaluating path
 Please see following notebooks to run each method using Benchmark:
 * [Decoupler](https://github.com/hedgehug/Benchmark/blob/main/run_decoupler.ipynb)
 * [PIANO](https://github.com/hedgehug/Benchmark/blob/main/run_PIANO.ipynb)
+* [EGSEA](https://github.com/hedgehug/Benchmark/blob/main/run_EGSEA.ipynb) (including camera, safe, gage, padog, plage, zscore, gsva, ssgsea, ora)
+* 
+
 
 A compressed version of all scripts can be found at XXXX.
