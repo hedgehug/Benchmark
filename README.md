@@ -1,15 +1,17 @@
 # Benchmark
-This repository holds the data and scripts used in Benchmark for evaluating pathway analysis methods.
+This repository holds the example data and scripts used in Benchmark for evaluating pathway analysis methods.
+
+Please find the full version of the data and scripts at [figshare](xxx).
 
 # Data summary
 
 * [Pathway files](https://github.com/hedgehug/Benchmark/tree/main/pathway_files)
 * [Raw count matrix](https://github.com/hedgehug/Benchmark/tree/main/data/count_matrix)
-* Prerank files:
+* Pre-ranked files using [DESeq2 statistics](https://github.com/hedgehug/Benchmark/tree/main/data/prerank_DESeq2) or [fold change](https://github.com/hedgehug/Benchmark/tree/main/data/prerank_fc)
 
 # Run methods
 
-Please see following notebooks to run each method using Benchmark:
+Please see following notebooks to evaluate each method using Benchmark:
 * [Decoupler](https://github.com/hedgehug/Benchmark/blob/main/run_decoupler.ipynb)
 * [PIANO](https://github.com/hedgehug/Benchmark/blob/main/run_PIANO.ipynb)
 * [EGSEA](https://github.com/hedgehug/Benchmark/blob/main/run_EGSEA.ipynb) (including camera, safe, gage, padog, plage, zscore, gsva, ssgsea, ora)
@@ -17,4 +19,4 @@ Please see following notebooks to run each method using Benchmark:
 * [PET](https://github.com/hedgehug/Benchmark/blob/main/run_PET.ipynb) (including Ora, GSEA and Enrichr)
 
 
-A compressed version of all scripts can be found at XXXX.
+
