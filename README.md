@@ -18,5 +18,7 @@ Please see following notebooks to evaluate each method using Benchmark:
 * [Enrichment browser](https://github.com/hedgehug/Benchmark/blob/main/notebooks/run_Enrichment_browser.ipynb)
 * [PET](https://github.com/hedgehug/Benchmark/blob/main/notebooks/run_PET.ipynb) (including Ora, GSEA and Enrichr)
 
+# Summarize all methods
 
+[Summary of all results](https://github.com/hedgehug/Benchmark/blob/main/plot_result.ipynb)
 
