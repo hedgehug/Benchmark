@@ -12,11 +12,11 @@ Please find the full version of the data and scripts at [figshare](xxx).
 # Run methods
 
 Please see following notebooks to evaluate each method using Benchmark:
-* [Decoupler](https://github.com/hedgehug/Benchmark/blob/main/run_decoupler.ipynb)
-* [PIANO](https://github.com/hedgehug/Benchmark/blob/main/run_PIANO.ipynb)
-* [EGSEA](https://github.com/hedgehug/Benchmark/blob/main/run_EGSEA.ipynb) (including camera, safe, gage, padog, plage, zscore, gsva, ssgsea, ora)
-* [Enrichment browser](https://github.com/hedgehug/Benchmark/blob/main/run_Enrichment_browser.ipynb)
-* [PET](https://github.com/hedgehug/Benchmark/blob/main/run_PET.ipynb) (including Ora, GSEA and Enrichr)
+* [Decoupler](https://github.com/hedgehug/Benchmark/blob/main/notebooks/run_decoupler.ipynb)
+* [PIANO](https://github.com/hedgehug/Benchmark/blob/main/notebooks/run_PIANO.ipynb)
+* [EGSEA](https://github.com/hedgehug/Benchmark/blob/main/notebooks/run_EGSEA.ipynb) (including camera, safe, gage, padog, plage, zscore, gsva, ssgsea, ora)
+* [Enrichment browser](https://github.com/hedgehug/Benchmark/blob/main/notebooks/run_Enrichment_browser.ipynb)
+* [PET](https://github.com/hedgehug/Benchmark/blob/main/notebooks/run_PET.ipynb) (including Ora, GSEA and Enrichr)
 
 
 
