@@ -9,13 +9,32 @@ import gseapy as gp
 
 random.seed(42)
 
-def run_ora(pathway_dict, deg_dict, gene_universe_num, out_file_prefix, out_dir):
+
+def extract_deg_rnk(file_name, deg_num=200, ascending=True):
+    df = pd.read_csv(file_name, sep='\t', header=None)
+    df = df.sort_values(by=1, ascending=ascending)
+    top_genes = df[0][:deg_num].to_numpy()
+    return top_genes
+
+
+def read_gmt(file_name):
+    file = open(file_name, 'r')
+    info = file.readlines()
+    pathway_dict = dict()
+    for line in info:
+        line = line.strip().split('\t')
+        pathway_dict[line[0]] = line[2:]
+    file.close()
+    return pathway_dict
+
+
+def run_ora(pathway_dict, deg_dict, gene_universe_num, out_dir):
     for item in deg_dict.keys():
         print('Running ORA for genes in ', item)
-        run_fisher_test(pathway_dict, deg_dict[item], gene_universe_num, out_file_prefix, out_dir, key=item)
+        run_fisher_test(pathway_dict, deg_dict[item], gene_universe_num, out_dir, key=item)
 
 
-def run_fisher_test(pathway_dict, gene_set, gene_universe_num, out_file_prefix, out_dir, key):
+def run_fisher_test(pathway_dict, gene_set, gene_universe_num, out_dir, key):
     gene_set = set(gene_set)
     pval_list = []
     intersection_list = []
@@ -31,7 +50,7 @@ def run_fisher_test(pathway_dict, gene_set, gene_universe_num, out_file_prefix, 
     pval_list, fdr_list, pathway_list, intersection_list = \
         (list(t) for t in zip(*sorted(zip(pval_list, fdr_list, pathway_list, intersection_list))))
 
-    out_file = open(out_dir+'/'+out_file_prefix+'.'+key+'.ora_result.txt', 'w')
+    out_file = open(out_dir+'/'+key+'.ora_result.txt', 'w')
     out_file.write('Pathway\t#Overlap Gene\tp-value\tFDR\tRank\n')
     rank = 1
     for idx in range(len(pathway_list)):
@@ -39,22 +58,20 @@ def run_fisher_test(pathway_dict, gene_set, gene_universe_num, out_file_prefix, 
                                   str(pval_list[idx]), str(fdr_list[idx]), str(rank)])+'\n')
         rank += 1
     out_file.close()
-    print('Results written to ', out_dir+'/'+out_file_prefix+'.'+key+'.ora_result.txt')
+    print('Results written to ', out_dir+'/'+key+'.ora_result.txt')
     print('*'*20)
 
 
-def run_enrichr(pathway_dict, deg_dict, gene_universe, permutation_num, permutation_file_name,
-                out_file_prefix, out_dir):
+def run_enrichr(pathway_dict, deg_dict, gene_universe, permutation_num, permutation_file_name, out_dir):
     for item in deg_dict.keys():
         print('Running Enrichr for genes in ', item)
-        run(pathway_dict=pathway_dict, gene_set=deg_dict[item],
+        run_enrichr_test(pathway_dict=pathway_dict, gene_set=deg_dict[item],
             gene_universe=gene_universe, permutation_num=permutation_num,
-            permutation_file_name=permutation_file_name,
-            out_file_prefix=out_file_prefix, out_dir=out_dir, key=item)
+            permutation_file_name=permutation_file_name, out_dir=out_dir, key=item)
 
 
-def run(pathway_dict, gene_set, gene_universe, permutation_num,
-        permutation_file_name, out_file_prefix, out_dir, key):
+def run_enrichr_test(pathway_dict, gene_set, gene_universe, permutation_num,
+        permutation_file_name, out_dir, key):
     if not os.path.exists(permutation_file_name):
         print(permutation_file_name, 'does not exist, initializing permutation')
         generate_permutation(gene_universe, len(gene_set),
@@ -99,7 +116,7 @@ def run(pathway_dict, gene_set, gene_universe, permutation_num,
 
     # fdr_list = multitest.fdrcorrection(pval_list, is_sorted=False)[-1]
 
-    out_file = open(out_dir+'/'+out_file_prefix+'.'+key+'.enrichr_result.txt', 'w')
+    out_file = open(out_dir+'/'+key+'.enrichr_result.txt', 'w')
     out_file.write('Pathway\tp-value\tCombined score\tRank\n')
     rank = 1
     for idx in range(len(pathway_names)):
@@ -107,7 +124,7 @@ def run(pathway_dict, gene_set, gene_universe, permutation_num,
                                   str(combined_score_list[idx]), str(rank)]) + '\n')
         rank +=1
     out_file.close()
-    print('Results written to ', out_dir+'/'+out_file_prefix+'.'+key+'.enrichr_result.txt')
+    print('Results written to ', out_dir+'/'+key+'.enrichr_result.txt')
     print('*' * 20)
 
 
@@ -283,7 +300,7 @@ def run(ora_result_file, enrichr_result_file, gsea_result_file, out_dir, file_pr
     fdr_list = multitest.fdrcorrection(pval_list, is_sorted=False)[-1]
 
     # write to results
-    out_file = open(out_dir+'/'+file_prefix+'.'+direction+'.PET.txt', 'w')
+    out_file = open(out_dir+'/'+file_prefix+'.PET.txt', 'w')
     # write header
     out_file.write('Pathway\tPET rank\tPET p-value\tPET FDR\tAverage rank')
     for method in methods:
@@ -297,7 +314,7 @@ def run(ora_result_file, enrichr_result_file, gsea_result_file, out_dir, file_pr
         out_file.write('\n')
     out_file.close()
 
-    print('Results written to ', out_dir+'/'+file_prefix+'.'+direction+'.PET.txt')
+    print('Results written to ', out_dir+'/'+file_prefix+'.PET.txt')
 
 
 def combine_gsea_cmd_results(gsea_dir, gsea_label, key):
@@ -335,21 +352,16 @@ def combine_gsea_cmd_results(gsea_dir, gsea_label, key):
     return gsea_dir+'/tmp_result.'+key+'.txt'
 
 
-def run_PET(file_prefix, deg_dict, pathway_dict, result_dir, gsea_path, out_dir, gsea_pos_label='pos'):
+def run_PET(ora_result_file, enrichr_result_file, gsea_result_file, pathway_dict,
+            out_dir, gsea_pos_label='pos', file_prefix=None):
     # identify files relevant
     files = dict()
-    all_files = os.listdir(result_dir)
-    all_files.sort()
-    for key in deg_dict.keys():
-        files[key] = dict()
-        for f in all_files:
-            if f.__contains__(key) and f.__contains__('ora_result') and f.startswith(file_prefix):
-                files[key]['ora'] = result_dir+f
-            elif f.__contains__(key) and f.__contains__('enrichr_result') and f.startswith(file_prefix):
-                files[key]['enrichr'] = result_dir + f
-            else:
-                continue
+    files['up'] = dict()
+    files['up']['ora'] = ora_result_file
+    files['up']['enrichr'] = enrichr_result_file
+
     tmp_file = []
+    gsea_path = gsea_result_file
     if os.path.isdir(gsea_path):
         print('GSEA path was provided as directory, command line version used.')
         # combine GSEA results, make it GSEAPY output like
@@ -378,17 +390,15 @@ def run_PET(file_prefix, deg_dict, pathway_dict, result_dir, gsea_path, out_dir,
         tmp_df.loc[tmp_df['NES'] >= 0, 'NOM p-val'] = 1
         # GSEA might have NA p-value, replace with 1
         tmp_df['NOM p-val'].fillna(1, inplace=True)
-        tmp_df.to_csv(gsea_path.replace('.csv', '.down.tmp.csv'), sep=',', index=True)
-        files['down']['gsea'] = gsea_path.replace('.csv', '.down.tmp.csv')
-        tmp_file.append(files['down']['gsea'])
+        # tmp_df.to_csv(gsea_path.replace('.csv', '.down.tmp.csv'), sep=',', index=True)
+        # files['down']['gsea'] = gsea_path.replace('.csv', '.down.tmp.csv')
+        # tmp_file.append(files['down']['gsea'])
 
     # combine the results
-    for key in deg_dict.keys():
-        print('For genes in ', key, 'direction, result files found: ')
-        print(files[key]['ora'], '\n', files[key]['enrichr'], '\n', files[key]['gsea'])
+    for key in files.keys():
         run(ora_result_file=files[key]['ora'], enrichr_result_file= files[key]['enrichr'],
-            gsea_result_file=files[key]['gsea'], out_dir=out_dir, file_prefix = file_prefix,
-            pathway_dict=pathway_dict, direction=key)
+            gsea_result_file=files[key]['gsea'], out_dir=out_dir,
+            pathway_dict=pathway_dict, direction=key, file_prefix=file_prefix)
 
     # remove the tmp files created for GSEA
     for f in tmp_file:
@@ -397,11 +407,11 @@ def run_PET(file_prefix, deg_dict, pathway_dict, result_dir, gsea_path, out_dir,
 
 def run_GSEA(prerank_file_path, pathway_file, out_dir, gsea_cli_path=None, method='Python',
              thread_num=5, min_size=15, max_size=500, permutation_num=1000, seed=42,
-             plot=False, gsea_out_label='GSEA_result'):
+             no_plot=True, gsea_out_label='GSEA_result'):
     if method == 'Python':
         run_GSEA_python(prerank_file_path = prerank_file_path,
                         pathway_file = pathway_file, out_dir=out_dir,
-                        plot= plot, min_size=min_size, max_size=max_size,
+                        no_plot= no_plot, min_size=min_size, max_size=max_size,
                         thread_num = thread_num, permutation_num=permutation_num,
                         seed=seed)
     elif method == 'cli':
@@ -414,7 +424,7 @@ def run_GSEA(prerank_file_path, pathway_file, out_dir, gsea_cli_path=None, metho
         # call GSEA cmd script
         run_GSEA_cmd(cli_file_path=gsea_cli_path, prerank_file_path = prerank_file_path,
                      pathway_file = pathway_file, out_dir=out_dir,
-                     plot= plot, min_size=min_size, max_size=max_size,
+                     plot= no_plot, min_size=min_size, max_size=max_size,
                      permutation_num=permutation_num, seed=seed, gsea_out_label=gsea_out_label)
     return
 
@@ -442,7 +452,7 @@ def run_GSEA_cmd(cli_file_path, prerank_file_path, pathway_file, out_dir, gsea_o
               ' -set_max '+str(max_size)+' -set_min '+str(min_size)+' -zip_report false -out '+out_dir)
 
 
-def run_GSEA_python(prerank_file_path, pathway_file, out_dir, plot=False, thread_num=5, min_size=15,
+def run_GSEA_python(prerank_file_path, pathway_file, out_dir, no_plot=True, thread_num=5, min_size=15,
                     max_size=500, permutation_num=1000, seed=42):
     # read rank file
     rnk = pd.read_csv(prerank_file_path, header=None, index_col=0, sep="\t")
@@ -457,5 +467,5 @@ def run_GSEA_python(prerank_file_path, pathway_file, out_dir, plot=False, thread
                          permutation_num=permutation_num,  # reduce number to speed up testing
                          outdir=out_dir,  # don't write to disk
                          seed=seed,
-                         plot = plot,
+                         no_plot = no_plot,
                          verbose=True)
