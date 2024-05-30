@@ -29,4 +29,4 @@ while (method_idx<=length(EnrichmentBrowser::sbeaMethods())) {
 
 comb.res <- combResults(res_list)
 res <- gsRanking(comb.res, signif.only = FALSE)
-write.table(res, 'OUTPUT_FILE', sep = '\t', quote = FALSE)
+write.table(res, 'OUTPUUT_FILE', sep = '\t', quote = FALSE)
