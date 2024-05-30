@@ -1,7 +1,7 @@
 # Benchmark
 This repository holds the example data and scripts used in Benchmark for evaluating pathway analysis methods.
 
-Please find the full version of the data and scripts at [figshare](xxx).
+Please find the full version of the data and scripts at [figshare](https://doi.org/10.6084/m9.figshare.c.7252324).
 
 # Data summary
 
