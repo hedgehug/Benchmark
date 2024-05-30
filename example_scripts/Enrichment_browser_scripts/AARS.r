@@ -1,10 +1,10 @@
 options(warn=-1)
 library(EnrichmentBrowser)
 
-gmt.file<-file.path('pathway_files/K562_DESEq2.gmt') 
+gmt.file<-file.path('../pathway_files/K562_DESEq2.gmt') 
 hsa.gs<-getGenesets(gmt.file)
 
-data.dir <- 'DATA_DIR'
+data.dir <- '../data/Enrichment_browser_data/'
 exprs.file<-file.path(data.dir,"AARS.exprs.tab") 
 cdat.file<-file.path(data.dir,"AARS.colData.tab") 
 rdat.file<-file.path(data.dir,"AARS.rowData.tab") 
@@ -29,4 +29,4 @@ while (method_idx<=length(EnrichmentBrowser::sbeaMethods())) {
 
 comb.res <- combResults(res_list)
 res <- gsRanking(comb.res, signif.only = FALSE)
-write.table(res, 'example_results/Enrichment_browser_results/AARS.ebrowser_result.txt', sep = '\t', quote = FALSE)
+write.table(res, '../example_results/Enrichment_browser_results/AARS.ebrowser_result.txt', sep = '\t', quote = FALSE)
