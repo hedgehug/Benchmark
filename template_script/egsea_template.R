@@ -29,4 +29,4 @@ gsa=egsea.cnt(counts=cnt_mat,group=group_factor,
               gs.annots=gs.annot,symbolsMap=NULL, baseGSEAs=egsea.base()[-c(2,12)],
               sort.by="avg.rank", num.threads=4,report=FALSE)
 # write results
-write.table(gsa$results$custom$test.results$'2vs1', 'output_file', quote = FALSE, sep = "\t")
+write.table(gsa$results$custom$test.results$'2vs1'[1:11], 'output_file', quote = FALSE, sep = "\t")

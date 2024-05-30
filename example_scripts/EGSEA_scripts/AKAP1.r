@@ -3,12 +3,12 @@ library('EGSEAdata')
 library(limma)
 
 # load an example data first
-count_mat <- read.table('data/count_matrix/AKAP1.txt',
+count_mat <- read.table('../data/count_matrix/AKAP1.txt',
                         header=TRUE, sep = '\t', row.names = 1)
 cnt_mat <- data.matrix(count_mat[2:5])
 
 # read the gmt files
-pathway_file <- read.table('pathway_files/K562_DESEq2.gmt',
+pathway_file <- read.table('../pathway_files/K562_DESEq2.gmt',
                            header=FALSE, sep = '\t')
 pathway_name <- unlist(pathway_file[1], use.names = FALSE)
 pathway_info <- pathway_file[3:ncol(pathway_file)]
@@ -29,4 +29,4 @@ gsa=egsea.cnt(counts=cnt_mat,group=group_factor,
               gs.annots=gs.annot,symbolsMap=NULL, baseGSEAs=egsea.base()[-c(2,12)],
               sort.by="avg.rank", num.threads=4,report=FALSE)
 # write results
-write.table(gsa$results$custom$test.results$'2vs1', 'example_results/EGSEA_results/AKAP1.egsea_result.txt', quote = FALSE, sep = "\t")
+write.table(gsa$results$custom$test.results$'2vs1'[1:11], '../example_results/EGSEA_results/AKAP1.egsea_result.txt', quote = FALSE, sep = "\t")
