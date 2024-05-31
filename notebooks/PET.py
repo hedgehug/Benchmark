@@ -29,9 +29,9 @@ def read_gmt(file_name):
 
 
 def run_ora(pathway_dict, deg_dict, gene_universe_num, out_dir):
-    for item in deg_dict.keys():
+    for item in pathway_dict.keys():
         print('Running ORA for genes in ', item)
-        run_fisher_test(pathway_dict, deg_dict[item], gene_universe_num, out_dir, key=item)
+        run_fisher_test(deg_dict, pathway_dict[item], gene_universe_num, out_dir, key=item)
 
 
 def run_fisher_test(pathway_dict, gene_set, gene_universe_num, out_dir, key):
